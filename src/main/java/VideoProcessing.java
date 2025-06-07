@@ -122,9 +122,40 @@ public class VideoProcessing {
 
         return vetor;
     }
+    public static void imprimirFrame(byte[][][] videoPixels, int frameIndex) {
+        // Verifica se o vetor de pixels é nulo ou vazio
+        if (videoPixels == null || videoPixels.length == 0) {
+            System.out.println("O vetor de vídeo está vazio ou é nulo.");
+            return;
+        }
+
+        // Verifica se o índice do frame é válido
+        if (frameIndex < 0 || frameIndex >= videoPixels.length) {
+            System.out.println("Índice de frame inválido: " + frameIndex + ". O vídeo possui " + videoPixels.length + " frames.");
+            return;
+        }
+
+        byte[][] frame = videoPixels[frameIndex];
+        int altura = frame.length;
+        int largura = frame[0].length;
+
+        System.out.println("\n--- Imprimindo Frame " + frameIndex + " (Dimensões: " + altura + "x" + largura + ") ---");
+
+        for (int y = 0; y < altura; y++) {
+            for (int x = 0; x < largura; x++) {
+                // Converte o byte para int sem sinal (0-255) antes de imprimir
+                // Isso garante que valores como -1 sejam mostrados como 255, etc.
+                int pixelValue = frame[y][x] & 0xFF;
+                System.out.printf("%4d ", pixelValue); // Formata para ocupar 4 espaços, para alinhamento
+            }
+            System.out.println(); // Quebra de linha após cada linha de pixels
+        }
+        System.out.println("-----------------------------------------\n");
+    }
 
 
-    public static void main(String[] args) {
+
+        public static void main(String[] args) {
 
 //        String caminhoVideo = "D:\\Download\\video.mp4";
 //        String caminhoGravar = "D:\\Download\\video2.mp4";
@@ -147,8 +178,12 @@ public class VideoProcessing {
 //        System.out.println("Término do processamento");
 
         byte[][][] vetor = criarVetor3D(3,4,6);
-        byte[][] vetor2 =FilterSaltPepper.preencheFrameZeros(vetor,0);
-        exibirCamada(vetor2);
+            imprimirFrame(vetor,2);
+        byte[][][] vetor2= FilterSaltPepper.removerSalPimenta(vetor);
+
+
+            System.out.println("\n--- Imprimindo Frames ---");
+         imprimirFrame(vetor2,2);
 
 
 
