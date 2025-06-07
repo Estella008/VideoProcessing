@@ -157,33 +157,37 @@ public class VideoProcessing {
 
         public static void main(String[] args) {
 
-//        String caminhoVideo = "D:\\Download\\video.mp4";
-//        String caminhoGravar = "D:\\Download\\video2.mp4";
-//        double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
-//
-//        System.out.println("Carregando o vídeo... " + caminhoVideo);
-//        byte pixels[][][] = carregarVideo(caminhoVideo);
-//
-//        System.out.printf("Frames: %d   Resolução: %d x %d \n",
-//                pixels.length, pixels[0][0].length, pixels[0].length);
-//
-//        System.out.println("processamento remove ruído 1");
-//        //removerSalPimenta(pixels); //voce deve implementar esta funcao
-//
-//        System.out.println("processamento remove ruído 2");
-//        //removerBorroesTempo(pixels); //voce deve implementar esta funcao
-//
-//        System.out.println("Salvando...  " + caminhoGravar);
-//        gravarVideo(pixels, caminhoGravar, fps);
-//        System.out.println("Término do processamento");
+/*        String caminhoVideo = "D:\\Download\\video.mp4";
+        String caminhoGravar = "D:\\Download\\video2.mp4";
+        double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
+
+        System.out.println("Carregando o vídeo... " + caminhoVideo);
+        byte pixels[][][] = carregarVideo(caminhoVideo);
+
+        System.out.printf("Frames: %d   Resolução: %d x %d \n",
+                pixels.length, pixels[0][0].length, pixels[0].length);
+
+        System.out.println("processamento remove ruído 1");
+        //removerSalPimenta(pixels); //voce deve implementar esta funcao
+
+        System.out.println("processamento remove ruído 2");
+        //removerBorroesTempo(pixels); //voce deve implementar esta funcao
+
+        System.out.println("Salvando...  " + caminhoGravar);
+        gravarVideo(pixels, caminhoGravar, fps);
+        System.out.println("Término do processamento");*/
 
         byte[][][] vetor = criarVetor3D(3,4,6);
             imprimirFrame(vetor,2);
-        byte[][][] vetor2= FilterSaltPepper.removerSalPimenta(vetor);
+       byte[][][] vetor2 = UltilitariosDeFiltros.preencheFrameZeros(vetor);
+            imprimirFrame(vetor2,0);
+       imprimirFrame(vetor2,3);
 
 
-            System.out.println("\n--- Imprimindo Frames ---");
-         imprimirFrame(vetor2,2);
+
+//            System.out.println("\n--- Imprimindo Frames ---");
+//         imprimirFrame(vetor2,2);
+
 
 
 

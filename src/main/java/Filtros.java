@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+
+public class Filtros {
+    //Filtro que remove os ruídos da imagem(pontos brancos e pretos aleatórios que aparecem na imagem)
+
+
+    public static byte[][][] removerSalPimenta(byte[][][] pixels) {
+
+        int qFrames = pixels.length;
+        int altura;
+        int largura;
+
+        for (int f = 0; f < qFrames; f++) {
+            byte[][] frameOriginalZeros = UltilitariosDeFiltros.preencheBordaFrameZeros(pixels, f);
+
+            altura = frameOriginalZeros.length;
+            largura = frameOriginalZeros[0].length;
+
+            byte[][] quadroProcessado = new byte[altura - 2][largura - 2];
+
+
+            //pegando os pixels que estão no meio do frame preenchido com zeros
+            for (int y = 1; y < altura - 1; y++) {
+                for (int x = 1; x < largura - 1; x++) {
+
+                    // coleta os vizinhos como se fosse uma matriz 3x3
+                    ArrayList<Byte> vizinhos = new ArrayList<>();
+                    for (int j = -1; j <= 1; j++) {
+                        for (int i = -1; i <= 1; i++) {
+                            vizinhos.add(frameOriginalZeros[y + j][x + i]);
+                        }
+                    }
+
+                    //USA A NOVA FUNÇÃO DE MÉDIA!
+                    byte valorMedio = UltilitariosDeFiltros.media(vizinhos);
+
+                    //aplica o resultado ao novo quadro
+                    quadroProcessado[y - 1][x - 1] = valorMedio;
+                }
+            }
+            pixels[f] = quadroProcessado;
+        }
+        return pixels;
+    }
+    public static byte[][][] removerBorroestempo(byte[][][] image) {
+
+        return null;
+    }
+
+}
