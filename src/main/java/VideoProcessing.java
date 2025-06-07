@@ -170,10 +170,10 @@ public class VideoProcessing {
                 pixels.length, pixels[0][0].length, pixels[0].length);
 
         System.out.println("processamento remove ruído 1");
-        //removerSalPimenta(pixels); //voce deve implementar esta funcao
+        Filtros.removerSalPimenta(pixels);
 
         System.out.println("processamento remove ruído 2");
-        //removerBorroesTempo(pixels); //voce deve implementar esta funcao
+        Filtros.removerSalPimenta(pixels);
 
         System.out.println("Salvando...  " + caminhoGravar);
         gravarVideo(pixels, caminhoGravar, fps);
