@@ -9,6 +9,7 @@ public class Filtros {
         int qFrames = pixels.length;
         int altura;
         int largura;
+        byte valorMedio;
 
         for (int f = 0; f < qFrames; f++) {
             byte[][] frameOriginalZeros = UltilitariosDeFiltros.preencheBordaFrameZeros(pixels, f);
@@ -24,15 +25,15 @@ public class Filtros {
                 for (int x = 1; x < largura - 1; x++) {
 
                     // coleta os vizinhos como se fosse uma matriz 3x3
-                    ArrayList<Byte> vizinhos = new ArrayList<>();
+                    ArrayList<Byte> pixelsVizinhos = new ArrayList<>();
                     for (int j = -1; j <= 1; j++) {
                         for (int i = -1; i <= 1; i++) {
-                            vizinhos.add(frameOriginalZeros[y + j][x + i]);
+                            pixelsVizinhos.add(frameOriginalZeros[y + j][x + i]);
                         }
                     }
 
                     //USA A NOVA FUNÇÃO DE MÉDIA!
-                    byte valorMedio = UltilitariosDeFiltros.media(vizinhos);
+                    valorMedio = UltilitariosDeFiltros.media(pixelsVizinhos);
 
                     //aplica o resultado ao novo quadro
                     quadroProcessado[y - 1][x - 1] = valorMedio;
@@ -43,8 +44,33 @@ public class Filtros {
         return pixels;
     }
     public static byte[][][] removerBorroestempo(byte[][][] image) {
+        //preenchendo a imagem com um frame de zeros no início e no fim
+        byte[][][] imagemPreenchida= UltilitariosDeFiltros.preencheFrameZeros(image);
+        int qFrames = imagemPreenchida.length;
+        int altura = imagemPreenchida[0].length;
+        int largura = imagemPreenchida[0][0].length;
 
-        return null;
+        byte valorMedio;
+
+       //pegando os frames apenas do meio
+        for (int f = 1; f < qFrames-1; f++) {
+            byte quadroProcessado[][]= new byte[altura][largura];
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                   ArrayList<Byte> framesVizinhos = new ArrayList<>();
+                   for (int i = -1; i <= 1; i++) {
+                       framesVizinhos.add(imagemPreenchida[f+i][y][x]);
+
+                   }
+                   valorMedio = UltilitariosDeFiltros.media(framesVizinhos);
+                   quadroProcessado[y][x] = valorMedio;
+                }
+
+            }
+           image[f-1] = quadroProcessado;
+        }
+
+        return image;
     }
 
 }

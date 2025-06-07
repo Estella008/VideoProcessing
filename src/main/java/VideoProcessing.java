@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -107,15 +109,15 @@ public class VideoProcessing {
         }
     }
     public static byte[][][] criarVetor3D(int camadas, int linhas, int colunas) {
+        Random random = new Random();
         byte[][][] vetor = new byte[camadas][linhas][colunas];
 
-        byte valor = 0;
         for (int i = 0; i < camadas; i++) {
             for (int j = 0; j < linhas; j++) {
                 for (int k = 0; k < colunas; k++) {
-                    vetor[i][j][k] = valor++;
-                    // Para evitar overflow do byte (vai de -128 a 127)
-                    if (valor == 128) valor = -128;
+                   ;
+                    vetor[i][j][k] = (byte) random.nextInt(256); // 0 a 255
+                    vetor[i][j][k] += Byte.MIN_VALUE; // ajusta para -128 a 127
                 }
             }
         }
@@ -157,7 +159,7 @@ public class VideoProcessing {
 
         public static void main(String[] args) {
 
-/*        String caminhoVideo = "D:\\Download\\video.mp4";
+        String caminhoVideo = "D:\\Download\\video.mp4";
         String caminhoGravar = "D:\\Download\\video2.mp4";
         double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
 
@@ -175,18 +177,23 @@ public class VideoProcessing {
 
         System.out.println("Salvando...  " + caminhoGravar);
         gravarVideo(pixels, caminhoGravar, fps);
-        System.out.println("Término do processamento");*/
+        System.out.println("Término do processamento");
 
-        byte[][][] vetor = criarVetor3D(3,4,6);
+/*        byte[][][] vetor = criarVetor3D(6,4,6);
+            System.out.println("Farme 3");
+            imprimirFrame(vetor,3);
+            System.out.println("Farme 2");
             imprimirFrame(vetor,2);
-       byte[][][] vetor2 = UltilitariosDeFiltros.preencheFrameZeros(vetor);
-            imprimirFrame(vetor2,0);
-       imprimirFrame(vetor2,3);
+            System.out.println("Farme 4");
+            imprimirFrame(vetor,4);
+
+            Filtros.removerBorroestempo(vetor);
+
+            System.out.println("Frame 3 corrigido");
+            imprimirFrame(vetor,3);*/
 
 
 
-//            System.out.println("\n--- Imprimindo Frames ---");
-//         imprimirFrame(vetor2,2);
 
 
 
