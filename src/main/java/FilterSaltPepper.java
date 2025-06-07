@@ -9,12 +9,7 @@ public class FilterSaltPepper {
     public static byte[][][] removerBorroestempo(byte[][][] image) {
         return null;
     }
-    private static int converteByteInteiro(byte b) {
-        return 0;
-    };
-    private static byte converteIntByte(byte b) {
-        return 0;
-    }
+
     private static int media(ArrayList<Integer> array) {//nao tenho certeza se precisa ser um array de entrada
 
         return 0;
