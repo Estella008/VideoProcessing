@@ -38,4 +38,36 @@ public class FilterSaltPepper {
     }
 
 
+
+    public static void aplicarFiltroDeMedia(byte[][][] pixels) {
+
+    int qFrames = 0;
+    int altura = 0;
+    int largura = 0;
+
+        for (int f = 0; f < qFrames; f++) {
+            byte[][] quadroOriginal = pixels[f];
+            byte[][] quadroProcessado = new byte[altura][largura];
+
+        for (int y = 1; y < altura - 1; y++) {
+            for (int x = 1; x < largura - 1; x++) {
+
+                // coleta os vizinhos, reaproveitei da mediano, acho que é a mesma coisa
+                ArrayList<Integer> vizinhos = new ArrayList<>();
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        vizinhos.add(converteByteInteiro(quadroOriginal[y + j][x + i]));
+                    }
+                }
+
+                //USA A NOVA FUNÇÃO DE MÉDIA!
+                int valorMedio = media(vizinhos);
+
+                //aplica o resultado ao novo quadro
+                quadroProcessado[y][x] = converteIntByte(valorMedio);
+            }
+        }
+        pixels[f] = quadroProcessado;
+    }
+}
 }
