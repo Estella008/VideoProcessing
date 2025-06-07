@@ -96,27 +96,64 @@ public class VideoProcessing {
         }
         escritor.release(); //limpando o buffer 
     }
+    public static void exibirCamada(byte[][] vetor) {
+
+
+
+        for (int i = 0; i < vetor.length; i++) {
+            for (int j = 0; j < vetor[0].length; j++) {
+                System.out.print(vetor[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+    public static byte[][][] criarVetor3D(int camadas, int linhas, int colunas) {
+        byte[][][] vetor = new byte[camadas][linhas][colunas];
+
+        byte valor = 0;
+        for (int i = 0; i < camadas; i++) {
+            for (int j = 0; j < linhas; j++) {
+                for (int k = 0; k < colunas; k++) {
+                    vetor[i][j][k] = valor++;
+                    // Para evitar overflow do byte (vai de -128 a 127)
+                    if (valor == 128) valor = -128;
+                }
+            }
+        }
+
+        return vetor;
+    }
+
 
     public static void main(String[] args) {
 
-        String caminhoVideo = "D:\\Download\\video.mp4";
-        String caminhoGravar = "D:\\Download\\video2.mp4";
-        double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
+//        String caminhoVideo = "D:\\Download\\video.mp4";
+//        String caminhoGravar = "D:\\Download\\video2.mp4";
+//        double fps = 21.0; //isso deve mudar se for outro vídeo (avaliar metadados ???)
+//
+//        System.out.println("Carregando o vídeo... " + caminhoVideo);
+//        byte pixels[][][] = carregarVideo(caminhoVideo);
+//
+//        System.out.printf("Frames: %d   Resolução: %d x %d \n",
+//                pixels.length, pixels[0][0].length, pixels[0].length);
+//
+//        System.out.println("processamento remove ruído 1");
+//        //removerSalPimenta(pixels); //voce deve implementar esta funcao
+//
+//        System.out.println("processamento remove ruído 2");
+//        //removerBorroesTempo(pixels); //voce deve implementar esta funcao
+//
+//        System.out.println("Salvando...  " + caminhoGravar);
+//        gravarVideo(pixels, caminhoGravar, fps);
+//        System.out.println("Término do processamento");
 
-        System.out.println("Carregando o vídeo... " + caminhoVideo);
-        byte pixels[][][] = carregarVideo(caminhoVideo);
+        byte[][][] vetor = criarVetor3D(3,4,6);
+        byte[][] vetor2 =FilterSaltPepper.preencheFrameZeros(vetor,0);
+        exibirCamada(vetor2);
 
-        System.out.printf("Frames: %d   Resolução: %d x %d \n",
-                pixels.length, pixels[0][0].length, pixels[0].length);
 
-        System.out.println("processamento remove ruído 1");
-        //removerSalPimenta(pixels); //voce deve implementar esta funcao
-        
-        System.out.println("processamento remove ruído 2");
-        //removerBorroesTempo(pixels); //voce deve implementar esta funcao
-        
-        System.out.println("Salvando...  " + caminhoGravar);
-        gravarVideo(pixels, caminhoGravar, fps);
-        System.out.println("Término do processamento");
+
+
+
     }
 }
