@@ -29,35 +29,8 @@ public class UltilitariosDeFiltros {
     }
 
     //preenche as bosrdas de cada frame com zeros
-    public static byte[][] preencheBordaFrameZeros(byte[][][] image, int frame) {
-        //o tamnho da imagem é 720x960 e 24 frames
-        //criando uma imagem auxiliar
-        int linhas = image[0].length;
-        int colunas = image[0][0].length;
-        byte[][] frameZeros = new byte[linhas + 2][colunas + 2];
 
-        for (int i = 1; i < frameZeros.length - 1; i++) {
-            for (int j = 1; j < frameZeros[0].length - 1; j++) {
-                frameZeros[i][j] = image[frame][i - 1][j - 1];
 
-            }
-        }
-
-        return frameZeros;
-    }
-    public static byte[][][] preencheFrameZeros(byte[][][] image) {
-        int frames = image.length;
-        int linhas = image[0].length;
-        int colunas = image[0][0].length;
-        byte imagePreenchida[][][]= new byte[frames+2][linhas][colunas];
-
-        for (int i = 0; i < frames; i++) {
-            imagePreenchida[i+1]=image[i];
-        }
-
-        return imagePreenchida;
-
-    }
 
 
 }

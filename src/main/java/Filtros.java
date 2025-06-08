@@ -56,7 +56,7 @@ public class Filtros {
         int altura = image[0].length;
         int largura = image[0][0].length;
 
-        byte valorMedio;
+
 
         //Obtendo o número de nucleos do computador
         int numThreads = Runtime.getRuntime().availableProcessors();
