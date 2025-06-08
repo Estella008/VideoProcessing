@@ -3,8 +3,10 @@ import java.util.List;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
 public class VideoProcessing {
@@ -60,6 +62,39 @@ public class VideoProcessing {
         
         return cuboPixels;
     }
+    public static void gravarVideo(byte pixels[][][],
+                                   String caminho,
+                                   double fps) {
+
+        int qFrames = pixels.length;
+        int altura = pixels[0].length;
+        int largura = pixels[0][0].length;
+
+        int fourcc = VideoWriter.fourcc('a', 'v', 'c', '1');   // identificação codec .mp4
+        VideoWriter escritor = new VideoWriter(
+                caminho, fourcc, fps, new Size(largura, altura), true);
+
+        if (!escritor.isOpened()) {
+            System.err.println("Erro ao gravar vídeo no caminho sugerido");
+        }
+
+        Mat matrizRgb = new Mat(altura, largura, CvType.CV_8UC3); //voltamos a operar no RGB (limitação da lib)
+
+        byte linha[] = new byte[largura * 3];                // BGR intercalado
+
+        for (int f = 0; f < qFrames; f++) {
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    byte g = (byte) pixels[f][y][x];
+                    int i = x * 3;
+                    linha[i] = linha[i + 1] = linha[i + 2] = g;     // cinza → B,G,R
+                }
+                matrizRgb.put(y, 0, linha);
+            }
+            escritor.write(matrizRgb);
+        }
+        escritor.release(); //limpando o buffer
+    }
 
 
     public static void main(String[] args) {
@@ -81,21 +116,9 @@ public class VideoProcessing {
         Filtros.removerBorroestempo(pixels);
 
         System.out.println("Salvando...  " + caminhoGravar);
-        Testes.gravarVideo(pixels, caminhoGravar, fps);
+        gravarVideo(pixels, caminhoGravar, fps);
         System.out.println("Término do processamento");
 
-/*        byte[][][] vetor = criarVetor3D(6,4,6);
-            System.out.println("Farme 3");
-            imprimirFrame(vetor,3);
-            System.out.println("Farme 2");
-            imprimirFrame(vetor,2);
-            System.out.println("Farme 4");
-            imprimirFrame(vetor,4);
-
-            Filtros.removerBorroestempo(vetor);
-
-            System.out.println("Frame 3 corrigido");
-            imprimirFrame(vetor,3);*/
 
 
 
@@ -106,4 +129,6 @@ public class VideoProcessing {
 
 
     }
+
+
 }
