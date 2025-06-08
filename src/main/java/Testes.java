@@ -105,7 +105,7 @@ public class Testes {
         imprimirFrame(vetor3d, 0);
         imprimirFrame(vetor3d, 1);
         imprimirFrame(vetor3d, 2);
-       byte[][][] vetor= Filtros.removerBorroestempo(vetor3d);
+       byte[][][] vetor= Filtros.removerSalPimenta(vetor3d);
         imprimirFrame(vetor, 0);
         imprimirFrame(vetor, 1);
     }

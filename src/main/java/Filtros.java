@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Filtros {
     //Filtro que remove os ruídos da imagem(pontos brancos e pretos aleatórios que aparecem na imagem)
@@ -11,36 +12,43 @@ public class Filtros {
         int largura = pixels[0][0].length;
         byte valorMedio;
 
+        int numThreads = Runtime.getRuntime().availableProcessors();
 
-        for (int f = 0; f < qFrames; f++) {
-
-
-            byte[][] quadroProcessado = pixels[f].clone();
-
-
-            //pegando os pixels que estão no meio do frame
-            for (int y = 1; y < altura -1 ; y++) {
-                for (int x = 1; x < largura -1; x++) {
-
-                    // coleta os vizinhos como se fosse uma matriz 3x3
-                    ArrayList<Byte> pixelsVizinhos = new ArrayList<>();
-                    for (int j = -1; j <= 1; j++) {
-                        for (int i = -1; i <= 1; i++) {
-                            pixelsVizinhos.add(pixels[f][y + j][x + i]);
-                        }
-                    }
-
-                    //USA A NOVA FUNÇÃO DE MÉDIA!
-                    valorMedio = UltilitariosDeFiltros.media(pixelsVizinhos);
-
-                    //aplica o resultado ao novo quadro
-                    quadroProcessado[y][x] = valorMedio;
-                }
-            }
-            pixels[f] = quadroProcessado.clone();
+        //Garantindo que o número de threads é menor do que o de frames
+        // (eu sendo muito otimista com o meu notebook kkkkkk)
+        if (numThreads > qFrames) {
+            numThreads = qFrames;
         }
+        List<ThreadRemoverSalPimenta> threads = new ArrayList<>();
+
+        int framesPorThread = qFrames / numThreads;
+        int frameInicialThread = 0;
+
+        for (int i = 0; i < numThreads; i++) {
+            int frameFinalThread = frameInicialThread + framesPorThread;
+            ThreadRemoverSalPimenta thread = new ThreadRemoverSalPimenta(pixels, frameInicialThread,
+                    frameFinalThread, altura, largura);
+            threads.add(thread);
+            frameInicialThread = frameFinalThread;
+        }
+        for (ThreadRemoverSalPimenta thread : threads) {
+            thread.start(); // Isso faz com que o método run() da thread comece a ser executado
+        }
+        for (ThreadRemoverSalPimenta thread : threads) {
+            try {
+                thread.join(); // Espera a thread atual da lista terminar
+            } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt(); // Re-interrompe a thread atual
+                System.err.println("A thread foi interrompida enquanto aguardava: " + e.getMessage());
+
+            }
+        }
+
+
         return pixels;
     }
+
     public static byte[][][] removerBorroestempo(byte[][][] image) {
         //preenchendo a imagem com um frame de zeros no início e no fim
 
@@ -50,25 +58,45 @@ public class Filtros {
 
         byte valorMedio;
 
-       //pegando os frames apenas do meio
-        for (int f = 1; f < qFrames -1; f++) {
-            byte quadroProcessado[][]= new byte[altura][largura];
-            for (int y = 0; y < altura; y++) {
-                for (int x = 0; x < largura; x++) {
-                   ArrayList<Byte> framesVizinhos = new ArrayList<>();
-                   for (int i = -1; i <= 1; i++) {
-                       framesVizinhos.add(image[f+i][y][x]);
+        //Obtendo o número de nucleos do computador
+        int numThreads = Runtime.getRuntime().availableProcessors();
+        if (numThreads > qFrames) {
+            numThreads = qFrames;
+        }
+        //Calulando quantos frames por thread
+        int framesPorThread = qFrames / numThreads;
 
-                   }
-                   valorMedio = UltilitariosDeFiltros.media(framesVizinhos);
-                   quadroProcessado[y][x] = valorMedio;
-                }
+        ArrayList<ThreadRemoverBorroes> threads = new ArrayList<>();
+        int frameInicialThread = 0;
+        for (int i = 0; i < numThreads; i++) {
+            int frameFinalThread = frameInicialThread + framesPorThread;
+            ThreadRemoverBorroes thread = new ThreadRemoverBorroes(image, frameInicialThread, frameFinalThread,
+                    altura, largura);
+            //Armazenando a tread
+            threads.add(thread);
+            //Atualizando o início
+            frameInicialThread = frameFinalThread;
+        }
+
+        //Excutando cada thread
+        for (ThreadRemoverBorroes thread : threads) {
+            thread.start();
+        }
+        for (ThreadRemoverBorroes thread : threads) {
+            try {
+                thread.join(); // Espera a thread atual da lista terminar
+            } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt(); // Re-interrompe a thread atual
+                System.err.println("A thread foi interrompida enquanto aguardava: " + e.getMessage());
 
             }
-           image[f] = quadroProcessado.clone();
+
+
+
         }
 
         return image;
-    }
 
+    }
 }

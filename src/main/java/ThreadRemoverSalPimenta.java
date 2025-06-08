@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class ThreadSalPimenta extends Thread{
+public class ThreadRemoverSalPimenta extends Thread{
     private byte[][][] videoPixels; // Referência ao vídeo completo
     private int frameInicio;        // Frame de início (inclusivo) para esta thread
     private int frameFinal;          // Frame de fim (exclusivo) para esta thread
@@ -8,12 +8,12 @@ public class ThreadSalPimenta extends Thread{
     private int largura;
 
     // Construtor para inicializar a thread com sua porção de trabalho
-    public ThreadSalPimenta(byte[][][] pixels, int start, int end, int h, int w) {
-        this.videoPixels = pixels;
+    public ThreadRemoverSalPimenta(byte[][][] videoPixels, int start, int end, int altura, int largura) {
+        this.videoPixels = videoPixels;
         this.frameInicio = start;
         this.frameFinal = end;
-        this.altura = h;
-        this.largura = w;
+        this.altura = altura;
+        this.largura = largura;
     }
     @Override
     public void run(){
