@@ -36,7 +36,7 @@ public class ThreadRemoverSalPimenta extends Thread{
                     }
 
                     //USA A NOVA FUNÇÃO DE MÉDIA!
-                    byte valorMedio = UltilitariosDeFiltros.media(pixelsVizinhos);
+                    byte valorMedio = UltilitariosDeFiltros.mediana(pixelsVizinhos);
 
                     //aplica o resultado ao novo quadro
                     quadroProcessado[y][x] = valorMedio;
