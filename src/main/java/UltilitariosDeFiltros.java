@@ -31,19 +31,25 @@ public class UltilitariosDeFiltros {
     //preenche as bosrdas de cada frame com zeros
 
     public static byte mediana(ArrayList<Byte> pixelsValidos) {
+        ArrayList <Integer> pixelsValidosInt = new ArrayList<>();
+
+        // converte para inteiro os pixels
+        for (Byte pixel : pixelsValidos) {
+            pixelsValidosInt.add(pixel & 0xFF);
+        }
         // ordena os array de pixels validos
-        pixelsValidos.sort(null);
+        pixelsValidosInt.sort(null);
 
         int size = pixelsValidos.size();
         int mediana;
 
         if(size % 2 == 0){
-            int meio1 = Byte.toUnsignedInt(pixelsValidos.get((size / 2 ) - 1));
-            int meio2 = Byte.toUnsignedInt(pixelsValidos.get(size / 2));
+            int meio1 = pixelsValidosInt.get((size / 2 ) - 1);
+            int meio2 = pixelsValidosInt.get(size / 2);
 
             mediana =(meio1 + meio2) / 2;
         } else {
-            mediana = Byte.toUnsignedInt(pixelsValidos.get(size / 2));
+            mediana = pixelsValidosInt.get(size / 2);
         }
 
         return (byte) mediana;
