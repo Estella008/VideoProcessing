@@ -22,8 +22,8 @@ public class Filtros {
         }
         List<ThreadRemoverSalPimenta> threads = new ArrayList<>();
 
-        int framesPorThread = (qFrames - 2) / numThreads;
-        int frameInicialThread = 1;
+        int framesPorThread = qFrames / numThreads;
+        int frameInicialThread = 0;
 
         for (int i = 0; i < numThreads; i++) {
             int frameFinalThread = frameInicialThread + framesPorThread;
@@ -65,10 +65,10 @@ public class Filtros {
             numThreads = qFrames;
         }
         //Calulando quantos frames por thread
-        int framesPorThread = qFrames / numThreads;
+        int framesPorThread = (qFrames - 2) / numThreads;
 
         ArrayList<ThreadRemoverBorroes> threads = new ArrayList<>();
-        int frameInicialThread = 0;
+        int frameInicialThread = 1;
         for (int i = 0; i < numThreads; i++) {
             int frameFinalThread = frameInicialThread + framesPorThread;
             ThreadRemoverBorroes thread = new ThreadRemoverBorroes(image, frameInicialThread, frameFinalThread,
