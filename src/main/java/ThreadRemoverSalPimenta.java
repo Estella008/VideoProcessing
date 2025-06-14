@@ -16,34 +16,34 @@ public class ThreadRemoverSalPimenta extends Thread{
         this.largura = largura;
     }
     @Override
-    public void run(){
+    public void run() {
         for (int f = frameInicio; f < frameFinal; f++) {
 
+            byte[][] quadroOriginal = videoPixels[f];
+            byte[][] quadroProcessado = new byte[altura][largura];
+            for (int i = 0; i < altura; i++) {
+                //system.arraycopy é uma forma eficiente de copiar arrays 1D
+                System.arraycopy(quadroOriginal[i], 0, quadroProcessado[i], 0, largura);
+            }
 
-            byte[][] quadroProcessado = videoPixels[f].clone();
+            //ignorando as bordas
+            for (int y = 1; y < altura - 1; y++) {
+                for (int x = 1; x < largura - 1; x++) {
 
-
-            //pegando os pixels que estão no meio do frame
-            for (int y = 0; y < altura ; y++) {
-                for (int x = 0; x < largura ; x++) {
-
-                    // coleta os vizinhos como se fosse uma matriz 3x3
                     ArrayList<Byte> pixelsVizinhos = new ArrayList<>();
-                    for (int linha = Math.max(0, y - 1); linha <= Math.min(y + 1, altura - 1); linha++) {
-                        for (int coluna = Math.max(0,x-1); coluna <= Math.min(x + 1, largura - 1);coluna++) {
-                            pixelsVizinhos.add(videoPixels[f][linha][coluna]);
+                    for (int linha = y - 1; linha <= y + 1; linha++) {
+                        for (int coluna = x - 1; coluna <= x + 1; coluna++) {
+                            pixelsVizinhos.add(quadroOriginal[linha][coluna]);
                         }
                     }
 
-                    //USA A NOVA FUNÇÃO DE MÉDIA!
-                    byte valorMedio = UltilitariosDeFiltros.mediana(pixelsVizinhos);
-
-                    //aplica o resultado ao novo quadro
-                    quadroProcessado[y][x] = valorMedio;
+                    //calcula a mediana
+                    byte valorProcessado = UltilitariosDeFiltros.mediana(pixelsVizinhos);
+                    quadroProcessado[y][x] = valorProcessado;
                 }
             }
-            videoPixels[f] = quadroProcessado.clone();
-        }
 
+            videoPixels[f] = quadroProcessado;
+        }
     }
 }

@@ -119,15 +119,6 @@ public class VideoProcessing {
         gravarVideo(pixels, caminhoGravar, fps);
         System.out.println("Término do processamento");
 
-
-
-
-
-
-
-
-
-
     }
 
 
