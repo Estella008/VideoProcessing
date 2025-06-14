@@ -22,8 +22,8 @@ public class Filtros {
         }
         List<ThreadRemoverSalPimenta> threads = new ArrayList<>();
 
-        int framesPorThread = qFrames / numThreads;
-        int frameInicialThread = 0;
+        int framesPorThread = (qFrames - 2) / numThreads;
+        int frameInicialThread = 1;
 
         for (int i = 0; i < numThreads; i++) {
             int frameFinalThread = frameInicialThread + framesPorThread;
@@ -51,53 +51,53 @@ public class Filtros {
     }
 
     public static byte[][][] removerBorroestempo(byte[][][] image) {
-        //iltro precisa de pelo menos 3 frames para funcionar
-        if (image == null || image.length < 3) {
-            System.err.println("Filtro temporal precisa de pelo menos 3 frames para funcionar.");
-            return image;
-        }
+        //preenchendo a imagem com um frame de zeros no início e no fim
 
-        int totalFrames = image.length;
+        int qFrames = image.length;
         int altura = image[0].length;
         int largura = image[0][0].length;
 
-        //matriz nova pra armazenar
-        byte[][][] videoProcessado = new byte[totalFrames][altura][largura];
 
-        for (int f = 0; f < totalFrames; f++) {
-            for (int y = 0; y < altura; y++) {
-                System.arraycopy(image[f][y], 0, videoProcessado[f][y], 0, largura);
-            }
+
+        //Obtendo o número de nucleos do computador
+        int numThreads = Runtime.getRuntime().availableProcessors();
+        if (numThreads > qFrames) {
+            numThreads = qFrames;
         }
-        //aplica o filtro ignorando as bordas
-        for (int f = 1; f < totalFrames - 1; f++) {
-            for (int y = 1; y < altura - 1; y++) {
-                for (int x = 1; x < largura - 1; x++) {
+        //Calulando quantos frames por thread
+        int framesPorThread = qFrames / numThreads;
 
-                    ArrayList<Integer> pixelsTemporais = new ArrayList<>();
-                    pixelsTemporais.add(converteByteInteiro(image[f - 1][y][x]));
-                    pixelsTemporais.add(converteByteInteiro(image[f][y][x]));
-                    pixelsTemporais.add(converteByteInteiro(image[f + 1][y][x]));
-
-                    Collections.sort(pixelsTemporais);
-                    int valorMediano = pixelsTemporais.get(1);
-
-                    videoProcessado[f][y][x] = converteIntByte(valorMediano);
-                }
-            }
+        ArrayList<ThreadRemoverBorroes> threads = new ArrayList<>();
+        int frameInicialThread = 0;
+        for (int i = 0; i < numThreads; i++) {
+            int frameFinalThread = frameInicialThread + framesPorThread;
+            ThreadRemoverBorroes thread = new ThreadRemoverBorroes(image, frameInicialThread, frameFinalThread,
+                    altura, largura);
+            //Armazenando a tread
+            threads.add(thread);
+            //Atualizando o início
+            frameInicialThread = frameFinalThread;
         }
 
-        return videoProcessado;
-    }
-    private static int converteByteInteiro(byte b) {
-        return b & 0xFF;
-    }
+        //Excutando cada thread
+        for (ThreadRemoverBorroes thread : threads) {
+            thread.start();
+        }
+        for (ThreadRemoverBorroes thread : threads) {
+            try {
+                thread.join(); // Espera a thread atual da lista terminar
+            } catch (InterruptedException e) {
 
-    private static byte converteIntByte(int valor) {
-        if (valor > 255) valor = 255;
-        else if (valor < 0) valor = 0;
-        return (byte) valor;
-    }
+                Thread.currentThread().interrupt(); // Re-interrompe a thread atual
+                System.err.println("A thread foi interrompida enquanto aguardava: " + e.getMessage());
 
+            }
+
+
+
+        }
+
+        return image;
+
+    }
 }
-
