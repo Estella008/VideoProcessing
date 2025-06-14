@@ -23,7 +23,7 @@ public class ThreadRemoverBorroes extends Thread{
             for (int y = 0; y < altura; y++) {
                 for (int x = 0; x < largura; x++) {
                     ArrayList<Byte> framesVizinhos = new ArrayList<>();
-                    for (int i = Math.max(0,f-1); i <= Math.min(videoPixels.length-1,f+1); i++) {
+                    for (int i = f - 1; i <= f + 1; i++) {
                         framesVizinhos.add(videoPixels[i][y][x]);
 
                     }
