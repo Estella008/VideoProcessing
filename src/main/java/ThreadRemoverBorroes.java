@@ -27,7 +27,7 @@ public class ThreadRemoverBorroes extends Thread{
                         framesVizinhos.add(videoPixels[i][y][x]);
 
                     }
-                    byte valorMedio = UltilitariosDeFiltros.mediana(framesVizinhos);
+                    byte valorMedio = UltilitariosDeFiltros.media(framesVizinhos);
                     quadroProcessado[y][x] = valorMedio;
                 }
 

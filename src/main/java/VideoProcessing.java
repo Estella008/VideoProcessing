@@ -109,15 +109,16 @@ public class VideoProcessing {
         System.out.printf("Frames: %d   Resolução: %d x %d \n",
         pixels.length, pixels[0][0].length, pixels[0].length);
 
-        System.out.println("processamento remove ruído 1");
+        long t1 = System.currentTimeMillis();
         Filtros.removerSalPimenta(pixels);
-
-        System.out.println("processamento remove ruído 2");
         Filtros.removerBorroestempo(pixels);
+        long t2 = System.currentTimeMillis();
+        long duracao = t2 - t1;
 
         System.out.println("Salvando...  " + caminhoGravar);
         gravarVideo(pixels, caminhoGravar, fps);
         System.out.println("Término do processamento");
+        System.out.println("Tempo de duração: " + duracao);
 
 
 
