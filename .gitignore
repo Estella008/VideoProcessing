@@ -1,0 +1,6 @@
+target/
+*.class
+.idea/
+*.iml
+nbactions.xml
+*.mp4

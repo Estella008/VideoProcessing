@@ -13,7 +13,7 @@ Este projeto foi desenvolvido como parte da disciplina de **Arquitetura e Organi
 
 ---
 
-## 🌟 O Problema (Caso de Uso do Seu José)
+## 🌟 O Problema
 
 **Seu José**, um morador de Ouro Branco, encontrou um vídeo antigo de família danificado pelo tempo. O vídeo apresenta:
 
@@ -78,8 +78,8 @@ O desafio é restaurar a qualidade visual do vídeo, otimizando o tempo de corre
 - `VideoProcessing.java`: `main`, leitura/escrita de vídeos, funções de debug.
 - `Filtros.java`: implementação dos filtros paralelos.
 - `UltilitariosDeFiltros.java`: funções auxiliares (`mediana`, `media`, etc.).
-- `RemoverSalPimentaThread.java`: lógica paralela do filtro "Salt and Pepper".
-- `RemoverBorroesTempoThread.java`: lógica paralela do filtro temporal.
+- `ThreadRemoverSalPimenta.java`: lógica paralela do filtro "Salt and Pepper".
+- `ThreadRemoverBorroes.java`: lógica paralela do filtro temporal.
 
 ---
 
@@ -96,15 +96,6 @@ O desafio é restaurar a qualidade visual do vídeo, otimizando o tempo de corre
 2. O vídeo processado será salvo em `D:\Download\video2.mp4`.
 3. Compile todos os arquivos `.java`.
 4. Execute `VideoProcessing.java`.
-
----
-
-## 📜 Documentação (para entrega)
-
-- **Introdução**: descrição do problema e objetivo.
-- **Implementação**: detalhes dos algoritmos, estruturas, decisões de projeto.
-- **Conclusão**: dificuldades, aprendizados.
-- **Bibliografia**: fontes consultadas.
 
 ---
 
